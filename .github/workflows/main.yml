@@ -1,104 +1,108 @@
-name: Build Release
+# name: Build Release
 
-env:
-  PROJECT_OWNER: ${{ github.repository_owner }}
-  PROJECT_NAME: gogame
-  IMAGE_TAG: latest
-  target: release
+# env:
+#   PROJECT_OWNER: ${{ github.repository_owner }}
+#   PROJECT_NAME: gogame
+#   IMAGE_TAG: latest
+#   target: release
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Restore NuGet
-      uses: actions/cache@v1
-      with:
-        path: ~/.nuget
-        key: ${{ runner.os }}-cache-nuget-${{ hashFiles('*/*/packages.lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-cache-nuget-
-    - name: Restore npm
-      uses: actions/cache@v1
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-cache-npm-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cache-npm-
-    - name: Install dependencies
-      run: |
-        dotnet tool restore
-        yarn install
-    - name: Build
-      run: |
-        fake build -t ${{ env.target }}
-    - name: Upload deploy bundle
-      uses: actions/upload-artifact@v2
-      with:
-        name: deploy
-        path: deploy
-    - name: Cleanup
-      run: |
-        rm -rf deploy
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Restore NuGet
+#       uses: actions/cache@v1
+#       with:
+#         path: ~/.nuget
+#         key: ${{ runner.os }}-cache-nuget-${{ hashFiles('*/*/packages.lock.json') }}
+#         restore-keys: |
+#           ${{ runner.os }}-cache-nuget-
+#     - name: Restore npm
+#       uses: actions/cache@v1
+#       with:
+#         path: ./node_modules
+#         key: ${{ runner.os }}-cache-npm-${{ hashFiles('**/yarn.lock') }}
+#         restore-keys: |
+#           ${{ runner.os }}-cache-npm-
+#     - name: Install dependencies
+#       run: |
+#         dotnet tool install -g paket
+#         dotnet tool install -g fake-cli
+#         dotnet tool restore
+#         yarn install
+#     - name: Build
+#       run: |
+#         fake build -t ${{ env.target }}
+#     - name: Upload deploy bundle
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: deploy
+#         path: deploy
+#     - name: Cleanup
+#       run: |
+#         rm -rf deploy
 
-  release:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    - uses: actions/checkout@v2
-    - name: Download deploy bundle
-      uses: actions/download-artifact@v2
-      with:
-        name: deploy
-        path: deploy
-    - name: Release
-      uses: docker/build-push-action@v1
-      with:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-        repository: ${{ github.repository }}/${{ env.PROJECT_NAME }}-${{ env.target }}
-        registry: docker.pkg.github.com
-        tags: latest
-        tag_with_sha: false
+#   release:
+#     runs-on: ubuntu-latest
+#     needs: build
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Download deploy bundle
+#       uses: actions/download-artifact@v2
+#       with:
+#         name: deploy
+#         path: deploy
+#     - name: Release
+#       uses: docker/build-push-action@v1
+#       with:
+#         username: ${{ github.actor }}
+#         password: ${{ secrets.GITHUB_TOKEN }}
+#         repository: ${{ github.repository }}/${{ env.PROJECT_NAME }}-${{ env.target }}
+#         registry: docker.pkg.github.com
+#         tags: latest
+#         tag_with_sha: false
 
-  tests:
-    runs-on: self-hosted
-    needs: build
-    steps:
-    - uses: actions/checkout@v2
-    - name: Download deploy bundle
-      uses: actions/download-artifact@v2
-      with:
-        name: deploy
-        path: deploy
-    - name: Restore NuGet
-      uses: actions/cache@v1
-      with:
-        path: ~/.nuget
-        key: ${{ runner.os }}-cache-nuget-${{ hashFiles('**/packages.json.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cache-nuget-
-    - name: Restore npm
-      uses: actions/cache@v1
-      with:
-        path: ./node_modules
-        key: ${{ runner.os }}-cache-npm-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-cache-npm-
-    - name: Install dependencies
-      run: |
-        dotnet tool restore
-        yarn install
-    - name: Run unit tests
-      run: dotnet run -p Tests
-    - name: Run UI tests
-      run: dotnet run -p Tests -- --canopy headless
-    - name: Cleanup
-      run: |
-        rm -rf deploy \\canopy\\
+#   tests:
+#     runs-on: self-hosted
+#     needs: build
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Download deploy bundle
+#       uses: actions/download-artifact@v2
+#       with:
+#         name: deploy
+#         path: deploy
+#     - name: Restore NuGet
+#       uses: actions/cache@v1
+#       with:
+#         path: ~/.nuget
+#         key: ${{ runner.os }}-cache-nuget-${{ hashFiles('**/packages.json.lock') }}
+#         restore-keys: |
+#           ${{ runner.os }}-cache-nuget-
+#     - name: Restore npm
+#       uses: actions/cache@v1
+#       with:
+#         path: ./node_modules
+#         key: ${{ runner.os }}-cache-npm-${{ hashFiles('**/yarn.lock') }}
+#         restore-keys: |
+#           ${{ runner.os }}-cache-npm-
+#     - name: Install dependencies
+#       run: |
+#         dotnet tool install -g paket
+#         dotnet tool install -g fake-cli
+#         dotnet tool restore
+#         yarn install
+#     - name: Run unit tests
+#       run: dotnet run -p Tests
+#     - name: Run UI tests
+#       run: dotnet run -p Tests -- --canopy headless
+#     - name: Cleanup
+#       run: |
+#         rm -rf deploy \\canopy\\
