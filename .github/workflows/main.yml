@@ -1,18 +1,22 @@
-# name: Build Release
+name: Build Release
 
-# env:
-#   PROJECT_OWNER: ${{ github.repository_owner }}
-#   PROJECT_NAME: gogame
-#   IMAGE_TAG: latest
-#   target: release
+env:
+  PROJECT_OWNER: ${{ github.repository_owner }}
+  PROJECT_NAME: gogame
+  IMAGE_TAG: latest
+  target: release
 
-# on:
-#   push:
-#     branches: [ master ]
-#   pull_request:
-#     branches: [ master ]
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
-# jobs:
+jobs:
+  dummy:
+     - name: Dummy
+       run: |
+         echo "Nothing to see here..."
 #   build:
 #     runs-on: ubuntu-latest
 #     steps:
