@@ -14,9 +14,11 @@ on:
 
 jobs:
   dummy:
-     - name: Dummy
-       run: |
-         echo "Nothing to see here..."
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dummy
+      run: |
+        echo "Nothing to see here..."
 #   build:
 #     runs-on: ubuntu-latest
 #     steps:
