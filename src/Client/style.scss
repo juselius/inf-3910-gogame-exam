@@ -1,0 +1,53 @@
+
+div.boarder { /* bad pun */
+    position: absolute;
+    border: 12px solid rgb(155, 119, 52);
+    padding: 50px;
+    background-color: rgb(187, 151, 85);
+}
+
+table.boardpos {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+}
+
+.boardpos td {
+    width: 3.4rem;
+    height: 3.4rem;
+    padding: 0.2rem;
+}
+
+table.boardgrid {
+    border: 0x solid gray;
+}
+
+.boardgrid td {
+    border: 1px solid lightgray;
+    width: 3.4rem;
+    height: 3.4rem;
+}
+
+.fa-circle.white {
+    color: rgb(214, 207, 200);
+}
+
+.fa-circle.black {
+    color: rgb(39, 38, 36);
+}
+
+.fa-circle.forbidden {
+    color: rgba(255, 255, 255, 0);
+}
+
+.fa-circle.forbidden:hover {
+    color: rgba(255, 255, 255, 0);
+}
+
+.fa-circle.empty {
+    color: rgba(255, 255, 255, 0);
+}
+
+.fa-circle.empty:hover {
+    color: rgba(197, 118, 28, 0.4);
+}
