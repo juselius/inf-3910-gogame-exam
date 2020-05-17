@@ -1,3 +1,4 @@
+// DO NOT MODIFY
 module Client.WebSocket
 
 open FSharp.Control

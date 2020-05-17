@@ -1,4 +1,5 @@
-﻿module Version
+﻿// DO NOT MODIFY
+module Version
 
 let template = "1.10.0"
 
